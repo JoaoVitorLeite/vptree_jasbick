@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pagefold.qss</file>
+        <file>lightbreeze.qss</file>
+        <file>lightblue.qss</file>
+        <file>folderIcon.png</file>
+    </qresource>
+</RCC>
