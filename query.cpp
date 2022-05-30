@@ -365,7 +365,7 @@ int main(int argc, char *argv[]){
 
                 df->resetStatistics();
                 auto start = std::chrono::steady_clock::now();
-                tree->kNNInc(test->getFeatureVector(x), k, tree->getRoot(), ans, df);
+                tree->kNN(test->getFeatureVector(x), k, tree->getRoot(), ans, df);
                 auto end = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
@@ -373,7 +373,7 @@ int main(int argc, char *argv[]){
                      << ","
                      << elapsed.count()
                      << ","
-                     << df->getDistanceCount();
+                     << df->getDistanceCount() << endl;
 
             }
 

@@ -31,7 +31,7 @@ private:
         for(size_t x = 0; x < size; x++)
             ans.push_back(dataset.getFeatureVector(x));
 
-        return dataset;
+        return ans;
 
     }
     static InstanceDouble gnatPivot(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
@@ -367,6 +367,7 @@ private:
 
         InstanceDouble answer = dataset[v[0].second];
         dataset.resize(0);
+        v.clear();
 
         return answer;
 
