@@ -327,7 +327,7 @@ int main(int argc, char *argv[]){
 
         TreeInstanceDouble *tree = new TreeInstanceDouble(false,
                                                           0.0,
-                                                          *num_per_leaf,
+                                                          (uint_fast32_t)*num_per_leaf,
                                                           pvt_algo,
                                                           train,
                                                           df);

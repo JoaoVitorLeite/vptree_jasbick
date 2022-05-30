@@ -15,12 +15,12 @@ path_save_results="results/"
 
 make clean
 cp query.cpp main.cpp
-/usr/lib/qt5/bin/qmake -makefile ProjectJoao.pro
-#Qt/6.1.0/gcc_64/bin/qmake -makefile ProjectJoao.pro 
+/usr/lib/qt5/bin/qmake -makefile VP-Viewer.pro
+#Qt/6.1.0/gcc_64/bin/qmake -makefile VP-Viewer.pro 
 make
 
 for((i=0; i<9; i++));
 do
-    nohup ./ProjectJoao -DATASET_TRAIN ${dataset_train} -DATASET_TRAIN_CARDINALITY ${dataset_train_cardinality} -DATASET_TRAIN_DIMENSIONALITY ${dataset_train_dimensionality} -DATASET_TEST ${dataset_test} -DATASET_TEST_CARDINALITY ${dataset_test_cardinality} -DATASET_TEST_DIMENSIONALITY ${dataset_test_dimensionality} -PIVOT_TYPE ${pivot_type[$i]} -SEED ${seed[$i]} -K_MAX ${k_max} -PATH_SAVE_RESULTS ${path_save_results} -NUM_PER_LEAF ${num_per_leaf} &
+    nohup ./VP-Viewer.pro -DATASET_TRAIN ${dataset_train} -DATASET_TRAIN_CARDINALITY ${dataset_train_cardinality} -DATASET_TRAIN_DIMENSIONALITY ${dataset_train_dimensionality} -DATASET_TEST ${dataset_test} -DATASET_TEST_CARDINALITY ${dataset_test_cardinality} -DATASET_TEST_DIMENSIONALITY ${dataset_test_dimensionality} -PIVOT_TYPE ${pivot_type[$i]} -SEED ${seed[$i]} -K_MAX ${k_max} -PATH_SAVE_RESULTS ${path_save_results} -NUM_PER_LEAF ${num_per_leaf} &
 done
 
