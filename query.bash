@@ -1,9 +1,9 @@
 #!/bin/bash
 
-dataset_train="../datasets/train_ulcer_SPP.csv"
+dataset_train="Datasets/train_ulcer_SPP.csv"
 dataset_train_cardinality=40402
 dataset_train_dimensionality=12
-dataset_test="../datasets/test_ulcer_SPP.csv"
+dataset_test="Datasets/test_ulcer_SPP.csv"
 dataset_test_cardinality=4490
 dataset_test_dimensionality=12
 pivot_type=("RANDOM" "GNAT" "CONVEX" "KMEDOIDS" "MAXSEPARETED" "MAXVARIANCE" "SELECTION" "PCA" "SSS")
@@ -11,7 +11,7 @@ seed=($(shuf -i 0-500000 -n 9))
 k_max=100
 num_query=1000
 num_per_leaf=400
-path_save_results="../results/"
+path_save_results="results/"
 
 make clean
 cp query.cpp main.cpp
