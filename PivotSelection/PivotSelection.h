@@ -361,6 +361,7 @@ private:
         std::sort(v.begin(), v.end(), [](const std::pair<double, long>& a, const std::pair<double, long>& b){ return std::get<0>(a) > std::get<0>(b); });
 
         A.resize(0,0);
+        eigenValues.resize(0);
 //        for(size_t x = 0; x < getNumberOfPivots(); x++)
 //            setPivot(sample->instance(v[x].second), x);
 
