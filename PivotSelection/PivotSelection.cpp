@@ -276,14 +276,15 @@ InstanceDouble PivotSelection::getPivot(const DatasetDouble &dataset, Algorithm 
         case RANDOM: return randomPivots(dataset);
         case VP_TREE: return selectVp(dataset, df);
         //case K_MEDOID: break;
-        case K_MEDOID: return kmedoidPivots(dataset, df);
+        case K_MEDOID: return kmedoidPivots(sample_datasetPivot(dataset,1), df);
         case HULL_FOCI: return hull_foci(dataset, df);
-        case GNAT: return gnatPivot(dataset, df);
-        case MAX_SEPARATED: return maxseparetedPivots(dataset, df);
-        case SSS: return sssPivots(dataset, df);
-        case PCA: return pcaPivots(dataset, df);
-        case SELECTION: return selectionPivots(dataset, df);
+        case GNAT: return gnatPivot(sample_datasetPivot(dataset,1), df);
+        case MAX_SEPARATED: return maxseparetedPivots(sample_datasetPivot(dataset,1), df);
+        case SSS: return sssPivots(sample_datasetPivot(dataset,1), df);
+        case PCA: return pcaPivots(sample_datasetPivot(dataset,0.03), df);
+        case SELECTION: return selectionPivots(sample_datasetPivot(dataset,1), df);
         default: return randomPivots(dataset);
+
     }
 }
 
