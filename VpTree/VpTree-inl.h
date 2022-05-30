@@ -596,7 +596,7 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNIncWalk(const DType &qElemen
                 for (uint_fast32_t i = 0; i < leaf->numberOfElements(); i++){
                     DType leafElement = leaf->getPair(i).first();
                     double dist = df->getDistance(leafElement, qElement);
-                    QueueItem qi = QueueItem(dist, leafElement);
+                    QueueItem<DType> qi = QueueItem(dist, leafElement); //ALTERACAO JOAO - estava sem template
                     elementQueue.push(qi);
                 }
 
