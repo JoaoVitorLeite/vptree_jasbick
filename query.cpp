@@ -7,8 +7,69 @@
 #include <fstream>
 #include <chrono>
 
-/*
- * 
+//#include <QApplication>
+//#include "mainwindow.h"
+
+//QByteArray readTextFile(const QString &file_path) {
+//  QFile input_file(file_path);
+//  QByteArray input_data;
+
+//  if (input_file.open(QIODevice::Text | QIODevice::Unbuffered | QIODevice::ReadOnly)) {
+//    input_data = input_file.readAll();
+//    input_file.close();
+//    return input_data;
+//  }
+//  else {
+//    return QByteArray();
+//  }
+//}
+
+typedef VpTree<InstanceDouble, DistanceFunction<InstanceDouble>> TreeInstanceDouble;
+
+using namespace std;
+
+int main(int argc, char *argv[]){
+
+    //    QApplication app(argc, argv);
+
+    //    MainWindow *wMainWindow = new MainWindow();
+    //    wMainWindow->show();
+
+    //    QString stylesheet = readTextFile(":/lightbreeze.qss");
+
+    //    app.setStyleSheet(stylesheet);
+
+    //    return app.exec();
+
+//    srand(20);
+
+//    DatasetDouble *dataset = new DatasetDouble(5506);
+//    dataset->doubleFileToDataset(dataset, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
+//    DatasetDouble *data2 = new DatasetDouble(5506);
+//    data2->doubleFileToDataset(data2, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
+//    DistanceFunction<InstanceDouble> *df = new EuclideanDistance<InstanceDouble>();
+//    TreeInstanceDouble *tree = new TreeInstanceDouble(false,
+//                                                      0.0,
+//                                                      200,
+//                                                      PivotSelection::GNAT,
+//                                                      dataset,
+//                                                      df);
+//    DatasetDouble *ans = new DatasetDouble();
+//    tree->kNNInc(data2->getFeatureVector(0), 5, tree->getRoot(), ans, df);
+
+//    vector<double> v;
+
+//    for(size_t x = 0; x < data2->getCardinality(); x++)
+//        v.push_back(df->getDistance(data2->getFeatureVector(0), data2->getFeatureVector(x)));
+
+//    std::sort(v.begin(), v.end());
+//    v.resize(5);
+
+//    cout << "\n\n";
+//    for(double i : v)
+//        cout << i << endl;
+
+    /*
     -DATASET_TRAIN => Caminho para o dataset de treino
     ** -DATASET_TRAIN_CARDINALITY => Cardinalidade do dataset de treino
     ** -DATASET_TRAIN_DIMENSIONALITY => Dimensionalidade do dataset de treino
@@ -24,15 +85,6 @@
     -PATH_SAVE_RESULTS => Caminho para salvar os arquivos gerados !DEFAULT = ../results/
 
 */
-
-
-
-
-typedef VpTree<InstanceDouble, DistanceFunction<InstanceDouble>> TreeInstanceDouble;
-
-using namespace std;
-
-int main(int argc, char *argv[]){
 
     if((argc-1) % 2 != 0)
     {
@@ -273,7 +325,7 @@ int main(int argc, char *argv[]){
 
         TreeInstanceDouble *tree = new TreeInstanceDouble(false,
                                                           0.0,
-                                                          *num_per_leaf,
+                                                          (uint_fast32_t)*num_per_leaf,
                                                           pvt_algo,
                                                           train,
                                                           df);

@@ -4,6 +4,7 @@
 #include "../Distance/DistanceFunction.h"
 #include "../eigen/Eigenvalues"
 
+
 class PivotSelection{
 private:
     // Seleciona pivôs de forma aleatória
@@ -13,7 +14,27 @@ private:
     // Seleciona pivôs com o método do fecho-convexo.
     static InstanceDouble hull_foci(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df); //CONVEX
     //Implementacoes JOAO
-    static InstanceDouble gnatPivot(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
+    static DatasetDouble sample_datasetPivot(DatasetDouble dataset, double sampleSize){
+
+        size_t size = std::ceil(dataset.getCardinality()*sampleSize);
+
+        DatasetDouble ans = DatasetDouble(size);
+        std::vector<size_t> v;
+
+        for(size_t x = 0; x < dataset.getCardinality(); x++)
+            v.push_back(x);
+
+        std::random_shuffle(v.begin(), v.end());
+
+        ans.setCardinality(size);
+        ans.setDimensionality(dataset.getDimensionality());
+        for(size_t x = 0; x < size; x++)
+            ans.push_back(dataset.getFeatureVector(x));
+
+        return dataset;
+
+    }
+    static InstanceDouble gnatPivot(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
 
         static size_t nPivots = 1;
         size_t drop = 2, currentPivot = 0, p1, pos = 0;
@@ -28,7 +49,7 @@ private:
         for(size_t x = 0; x < (nPivots+drop); x++)
             pvtIndex[x] = 0;
 
-        aux = new size_t(static_cast<size_t>(rand()) %(dataset.getCardinality()-1));
+        aux = new size_t(static_cast<size_t>(rand() % (dataset.getCardinality()-1)));
         p1 = aux[0];
         bitmap[p1] = true;
         pvtIndex[currentPivot] = p1;
@@ -101,10 +122,13 @@ private:
         delete [] (bitmap);
         delete [] (pvtIndex);
 
-        return dataset[pvtIndex[drop]];
+        InstanceDouble answer = dataset[pvtIndex[drop]];
+        dataset.resize(0);
+
+        return answer;
 
     }
-    static InstanceDouble maxseparetedPivots(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
+    static InstanceDouble maxseparetedPivots(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
 
         static size_t nPivots = 1;
 
@@ -185,10 +209,13 @@ private:
         delete [] (bitmap);
         delete [] (pvtIndex);
 
-        return dataset[pvtIndex[drop]];
+        InstanceDouble answer = dataset[pvtIndex[drop]];
+        dataset.resize(0);
+
+        return answer;
 
     }
-    static InstanceDouble sssPivots(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
+    static InstanceDouble sssPivots(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
 
         static size_t nPivots = 1;
         static double alpha = 0.35;
@@ -263,10 +290,13 @@ private:
         delete [] (aux);
         delete [] (pvtIndex);
 
-        return dataset[pvtIndex[drop]];
+        InstanceDouble answer = dataset[pvtIndex[drop]];
+        dataset.resize(0);
+
+        return answer;
 
     }
-    static InstanceDouble pcaPivots(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
+    static InstanceDouble pcaPivots(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
 
         double max = std::numeric_limits<double>::min();
         double min = std::numeric_limits<double>::max();
@@ -330,13 +360,17 @@ private:
 
         std::sort(v.begin(), v.end(), [](const std::pair<double, long>& a, const std::pair<double, long>& b){ return std::get<0>(a) > std::get<0>(b); });
 
+        A.resize(0,0);
 //        for(size_t x = 0; x < getNumberOfPivots(); x++)
 //            setPivot(sample->instance(v[x].second), x);
 
-        return dataset[v[0].second];
+        InstanceDouble answer = dataset[v[0].second];
+        dataset.resize(0);
+
+        return answer;
 
     }
-    static InstanceDouble kmedoidPivots(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
+    static InstanceDouble kmedoidPivots(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
 
         double min = std::numeric_limits<double>::max();
         size_t size = dataset.getCardinality(), pvt_index = 0;
@@ -364,10 +398,13 @@ private:
 
         }
 
-        return dataset[pvt_index];
+        InstanceDouble answer = dataset[pvt_index];
+        dataset.resize(0);
+
+        return answer;
 
     }
-    static InstanceDouble selectionPivots(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
+    static InstanceDouble selectionPivots(DatasetDouble dataset, DistanceFunction<InstanceDouble> *df){
 
         return kmedoidPivots(dataset, df);
 

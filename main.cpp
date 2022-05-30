@@ -41,33 +41,33 @@ int main(int argc, char *argv[]){
 
     //    return app.exec();
 
-    //    srand(20);
+//    srand(20);
 
-    //    DatasetDouble *dataset = new DatasetDouble(5506);
-    //    dataset->doubleFileToDataset(dataset, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
-    //    DatasetDouble *data2 = new DatasetDouble(5506);
-    //    data2->doubleFileToDataset(data2, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
-    //    DistanceFunction<InstanceDouble> *df = new EuclideanDistance<InstanceDouble>();
-    //    TreeInstanceDouble *tree = new TreeInstanceDouble(false,
-    //                                                            0.0,
-    //                                                            200,
-    //                                                            PivotSelection::RANDOM,
-    //                                                            dataset,
-    //                                                            df);
-    //    DatasetDouble *ans = new DatasetDouble();
-    //    tree->kNNInc(data2->getFeatureVector(0), 5, tree->getRoot(), ans, df);
+//    DatasetDouble *dataset = new DatasetDouble(5506);
+//    dataset->doubleFileToDataset(dataset, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
+//    DatasetDouble *data2 = new DatasetDouble(5506);
+//    data2->doubleFileToDataset(data2, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
+//    DistanceFunction<InstanceDouble> *df = new EuclideanDistance<InstanceDouble>();
+//    TreeInstanceDouble *tree = new TreeInstanceDouble(false,
+//                                                      0.0,
+//                                                      200,
+//                                                      PivotSelection::GNAT,
+//                                                      dataset,
+//                                                      df);
+//    DatasetDouble *ans = new DatasetDouble();
+//    tree->kNNInc(data2->getFeatureVector(0), 5, tree->getRoot(), ans, df);
 
-    //    vector<double> v;
+//    vector<double> v;
 
-    //    for(size_t x = 0; x < data2->getCardinality(); x++)
-    //        v.push_back(df->getDistance(data2->getFeatureVector(0), data2->getFeatureVector(x)));
+//    for(size_t x = 0; x < data2->getCardinality(); x++)
+//        v.push_back(df->getDistance(data2->getFeatureVector(0), data2->getFeatureVector(x)));
 
-    //    std::sort(v.begin(), v.end());
-    //    v.resize(5);
+//    std::sort(v.begin(), v.end());
+//    v.resize(5);
 
-    //    cout << "\n\n";
-    //    for(double i : v)
-    //        cout << i << endl;
+//    cout << "\n\n";
+//    for(double i : v)
+//        cout << i << endl;
 
     /*
     -DATASET_TRAIN => Caminho para o dataset de treino
@@ -100,8 +100,6 @@ int main(int argc, char *argv[]){
                 *test = new DatasetDouble();
 
         DistanceFunction<InstanceDouble>* df = new EuclideanDistance<InstanceDouble>();
-
-//        std::string names[] = {"RANDOM", "GNAT", "CONVEX", "KMEDOIDS", "MAXSEPARETED", "MAXVARIANCE", "SELECTION", "PCA", "SSS"};
 
         std::string *dataset_train = nullptr,
                 *dataset_test = nullptr,

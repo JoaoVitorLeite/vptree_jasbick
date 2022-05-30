@@ -2,7 +2,7 @@
 
 InstanceDouble PivotSelection::randomPivots(const DatasetDouble &dataset){
 
-    srand(time_t(nullptr));
+    //srand(time_t(nullptr));
     return dataset[rand()% dataset.getCardinality()-1];
 }
 
