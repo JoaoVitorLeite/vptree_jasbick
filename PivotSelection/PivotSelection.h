@@ -367,14 +367,18 @@ private:
         return dataset[pvt_index];
 
     }
+    static InstanceDouble selectionPivots(const DatasetDouble &dataset, DistanceFunction<InstanceDouble> *df){
 
+        return kmedoidPivots(dataset, df);
+
+    }
 
     static InstanceString randomPivots(const DatasetString &dataset);
     static InstanceString selectVp(DatasetString dataset, DistanceFunction<InstanceString> *df);
     static InstanceString hull_foci(const DatasetString &dataset, DistanceFunction<InstanceString> *df);
 
 public:
-    enum Algorithm{RANDOM, VP_TREE, K_MEDOID, HULL_FOCI, GNAT, MAX_SEPARATED, SSS, PCA};
+    enum Algorithm{RANDOM, VP_TREE, K_MEDOID, HULL_FOCI, GNAT, MAX_SEPARATED, SSS, PCA, SELECTION};
 
     static InstanceDouble getPivot(const DatasetDouble &dataset, Algorithm algo, DistanceFunction<InstanceDouble> *df=nullptr);
     static InstanceString getPivot(const DatasetString &dataset, Algorithm algo, DistanceFunction<InstanceString> *df=nullptr);

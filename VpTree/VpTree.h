@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Node/Node.h"
 #include <queue>
 #include <VpTree/QueueItem.h>
 #include <Dataset/Dataset.h>
@@ -9,15 +10,15 @@
 #include <QProgressBar>
 #include <QObject>
 
-class SignalsAndSlots: public QObject{
-    Q_OBJECT
+//class SignalsAndSlots: public QObject{
+//    Q_OBJECT
 
-    signals:
-        void progressBarValueChanged(int newValue);
-};
+//    signals:
+//        void progressBarValueChanged(int newValue);
+//};
 
 template <class DType, class DistanceFunction>
-class VpTree: public SignalsAndSlots{
+class VpTree/*: public SignalsAndSlots*/{
 
     private:
         Node<DType> *root;
@@ -31,16 +32,16 @@ class VpTree: public SignalsAndSlots{
                                std::vector<DType> previousPivots,
                                std::vector<std::vector<double>> distanceVector,
                                Dataset<DType> *dataset,
-                               DistanceFunction * df,
-                               QProgressBar *progressBar);
+                               DistanceFunction * df/*,
+                               QProgressBar *progressBar*/);
 
         void getBucket(const double threshold,
                        std::vector<DType> previousPivots,
                        std::vector<std::vector<double>> distanceVector,
                        Dataset<DType> *dataset,
                        DistanceFunction * df,
-                       Bucket<DType>* bucket,
-                       QProgressBar *progressBar);
+                       Bucket<DType>* bucket/*,
+                       QProgressBar *progressBar*/);
 
         void incrementDistanceVector(const DType &pivot,
                                      const DType &parentPivot,
@@ -89,8 +90,8 @@ class VpTree: public SignalsAndSlots{
                const uint_fast32_t maxElements,
                PivotSelection::Algorithm algorithm,
                Dataset<DType> *dataset,
-               DistanceFunction * df,
-               QProgressBar *progressBar);
+               DistanceFunction * df/*,
+               QProgressBar *progressBar*/);
 
         ~VpTree(){ delete(root); root = nullptr; }
 

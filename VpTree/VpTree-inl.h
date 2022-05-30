@@ -10,18 +10,18 @@ IMPL_TEMPL VpTree<DType, DistanceFunction>::VpTree(bool balance,
                                                    uint_fast32_t maxElements,
                                                    PivotSelection::Algorithm algorithm,
                                                    Dataset<DType> *dataset,
-                                                   DistanceFunction *df,
-                                                   QProgressBar *progressBar){
+                                                   DistanceFunction *df/*,
+                                                   QProgressBar *progressBar*/){
 
     this->dataset = *dataset;
     this->algorithm = algorithm;
 
-    connect(this, SIGNAL(progressBarValueChanged(int)), progressBar, SLOT(setValue(int)));
+//    connect(this, SIGNAL(progressBarValueChanged(int)), progressBar, SLOT(setValue(int)));
 
     std::vector<DType> previousPivots;
     std::vector<std::vector<double>> distanceVector;
 
-    root = buildTree(false, threshold, maxElements, previousPivots, distanceVector, dataset, df, progressBar);
+    root = buildTree(false, threshold, maxElements, previousPivots, distanceVector, dataset, df/*, progressBar*/);
 
     if (balance) { balanceTree(); }
 }
@@ -32,10 +32,10 @@ IMPL_TEMPL Node<DType> *VpTree<DType, DistanceFunction>::buildTree(const bool is
                                                                    std::vector<DType> previousPivots,
                                                                    std::vector<std::vector<double>> distanceVector,
                                                                    Dataset<DType> *dataset,
-                                                                   DistanceFunction *df,
-                                                                   QProgressBar *progressBar){
+                                                                   DistanceFunction *df/*,
+                                                                   QProgressBar *progressBar*/){
 
-    updateProgress(progressBar);
+//    updateProgress(progressBar);
 
     const DType pivot = PivotSelection::getPivot(*dataset, algorithm, df);
 
@@ -62,7 +62,7 @@ IMPL_TEMPL Node<DType> *VpTree<DType, DistanceFunction>::buildTree(const bool is
 
         if (innerDataset->getSize() > 0){
             dirNode->setLeftNode(buildTree(true, threshold, maxElements, previousPivots, distanceVector,
-                                           innerDataset, df, progressBar));
+                                           innerDataset, df/*, progressBar*/));
         } else {
             delete(innerDataset);
             dirNode->setLeftNode(nullptr);
@@ -70,7 +70,7 @@ IMPL_TEMPL Node<DType> *VpTree<DType, DistanceFunction>::buildTree(const bool is
 
         if (outerDataset->getSize() > 0){
             dirNode->setRightNode(buildTree(false, threshold, maxElements, previousPivots, distanceVector,
-                                            outerDataset, df, progressBar));
+                                            outerDataset, df/*, progressBar*/));
         } else {
             delete(outerDataset);
             dirNode->setRightNode(nullptr);
@@ -95,12 +95,12 @@ IMPL_TEMPL Node<DType> *VpTree<DType, DistanceFunction>::buildTree(const bool is
         leaf->setPreviousPivots(previousPivots);
 
         dataset->erase(pivot);
-        updateProgress(progressBar);
+//        updateProgress(progressBar);
 
         for (uint_fast32_t i = 0; i < dataset->getSize(); i++){
 
             leaf->push_back(Pair<DType>(dataset->operator [](i), distanceVector.back()));
-            updateProgress(progressBar);
+//            updateProgress(progressBar);
         }
 
         delete(dataset);
@@ -118,11 +118,11 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::getBucket(const double threshol
                                                            std::vector<std::vector<double>> distanceVector,
                                                            Dataset<DType> *dataset,
                                                            DistanceFunction *df,
-                                                           Bucket<DType> *bucket,
-                                                           QProgressBar *progressBar){
+                                                           Bucket<DType> *bucket/*,
+                                                           QProgressBar *progressBar*/){
 
 
-    updateProgress(progressBar);
+//    updateProgress(progressBar);
 
     srand(time(nullptr));
     const DType pivot = dataset->operator [](rand()% dataset->getCardinality());
@@ -148,14 +148,14 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::getBucket(const double threshol
 
         // Recursively calls itself with the inner part of the dataset.
         if (innerDataset->getSize() > 0){
-            getBucket(threshold, previousPivots, distanceVector, innerDataset, df, bucket, progressBar);
+            getBucket(threshold, previousPivots, distanceVector, innerDataset, df, bucket/*, progressBar*/);
         } else {
             delete(innerDataset);
         }
 
         // Recursively calls itself with the outer part of the dataset.
         if (outerDataset->getSize() > 0){
-            getBucket(threshold, previousPivots, distanceVector, outerDataset, df, bucket, progressBar);
+            getBucket(threshold, previousPivots, distanceVector, outerDataset, df, bucket/*, progressBar*/);
         } else {
             delete(outerDataset);
         }
@@ -637,11 +637,11 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNInc(const DType &qElement,
 
     kNNIncWalk(qElement, k, node, &queue, df);
 
-    std::cout << "(kNNInc) resultQueue.size(): " << queue.size() << std::endl;
+    //std::cout << "(kNNInc) resultQueue.size(): " << queue.size() << std::endl;
     answer->reserve(k);
     for (uint_fast32_t i = 0; i < k; i++){
         answer->push_back(queue.top().featureVector);
-        std::cout << "(kNNInc) Distancia do " << i << " vizinho mais proximo:" << queue.top().dist << std::endl;
+        //std::cout << "(kNNInc) Distancia do " << i << " vizinho mais proximo:" << queue.top().dist << std::endl;
         queue.pop();
     }
 }
@@ -745,9 +745,9 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNN(const DType &qElement,
 }
 
 IMPL_TEMPL void VpTree<DType, DistanceFunction>::updateProgress(QProgressBar *progressBar){
-    ++progress;
-    if (progressBar->maximum() < SHRT_MAX)
-        emit progressBarValueChanged(progress);
-    else if (progress % SHRT_MAX == 0)
-        emit progressBarValueChanged(progress/SHRT_MAX);
+//    ++progress;
+//    if (progressBar->maximum() < SHRT_MAX)
+//        emit progressBarValueChanged(progress);
+//    else if (progress % SHRT_MAX == 0)
+//        emit progressBarValueChanged(progress/SHRT_MAX);
 }

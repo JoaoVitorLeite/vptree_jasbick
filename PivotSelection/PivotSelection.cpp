@@ -282,6 +282,7 @@ InstanceDouble PivotSelection::getPivot(const DatasetDouble &dataset, Algorithm 
         case MAX_SEPARATED: return maxseparetedPivots(dataset, df);
         case SSS: return sssPivots(dataset, df);
         case PCA: return pcaPivots(dataset, df);
+        case SELECTION: return selectionPivots(dataset, df);
         default: return randomPivots(dataset);
     }
 }
