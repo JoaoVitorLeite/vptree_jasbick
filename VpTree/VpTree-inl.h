@@ -732,12 +732,12 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNN(const DType &qElement,
         queue.pop();
     }
 
-    std::cout << "(kNN Padrão) resultQueue.size(): " << reverse.size() << std::endl;
+    //std::cout << "(kNN Padrão) resultQueue.size(): " << reverse.size() << std::endl;
 
     answer->reserve(k);
     for (uint_fast32_t i = 0; i < k; i++){
         answer->push_back(reverse.top().featureVector);
-        std::cout << "(kNN Padrao) Distancia do " << i << " vizinho mais proximo:" << reverse.top().dist << std::endl;
+        //std::cout << "(kNN Padrao) Distancia do " << i << " vizinho mais proximo:" << reverse.top().dist << std::endl;
         reverse.pop();
     }
 
