@@ -43,32 +43,43 @@ int main(int argc, char *argv[]){
 
 //    srand(20);
 
-//    DatasetDouble *dataset = new DatasetDouble(5506);
-//    dataset->doubleFileToDataset(dataset, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
-//    DatasetDouble *data2 = new DatasetDouble(5506);
-//    data2->doubleFileToDataset(data2, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5506, 2);
+//    DatasetDouble *train = new DatasetDouble();
+//    DatasetDouble::doubleFileToDataset(train, "/home/joaovictor/Code/vptree_jasbick/Datasets/train_ulcer_SPP.csv", 40402, 12);
+//    DatasetDouble *train2 = new DatasetDouble();
+//    DatasetDouble::doubleFileToDataset(train2, "/home/joaovictor/Code/vptree_jasbick/Datasets/train_ulcer_SPP.csv", 40402, 12);
+//    DatasetDouble *test = new DatasetDouble();
+//    DatasetDouble::doubleFileToDataset(test, "/home/joaovictor/Code/vptree_jasbick/Datasets/test_ulcer_SPP.csv", 4490, 12);
 //    DistanceFunction<InstanceDouble> *df = new EuclideanDistance<InstanceDouble>();
+
 //    TreeInstanceDouble *tree = new TreeInstanceDouble(false,
 //                                                      0.0,
-//                                                      200,
-//                                                      PivotSelection::GNAT,
-//                                                      dataset,
+//                                                      400,
+//                                                      PivotSelection::VP_TREE,
+//                                                      train,
 //                                                      df);
+//    size_t k = 100;
+
 //    DatasetDouble *ans = new DatasetDouble();
-//    tree->kNNInc(data2->getFeatureVector(0), 5, tree->getRoot(), ans, df);
+//    df->ResetStatistics();
+//    tree->kNN(test->getFeatureVector(0), 10, tree->getRoot(), ans, df);
+//    cout << df->getDistanceCount() << endl;
 
-//    vector<double> v;
+//    for(size_t x = 0; x < test->getCardinality(); x++){
 
-//    for(size_t x = 0; x < data2->getCardinality(); x++)
-//        v.push_back(df->getDistance(data2->getFeatureVector(0), data2->getFeatureVector(x)));
+//        tree->kNN(test->getFeatureVector(x), k, tree->getRoot(), ans, df);
 
-//    std::sort(v.begin(), v.end());
-//    v.resize(5);
+//        vector<double> v;
+//        for(size_t y = 0; y < train2->getCardinality(); y++)
+//            v.push_back(df->getDistance(test->getFeatureVector(x), train2->getFeatureVector(y)));
+//        std::sort(v.begin(), v.end());
+//        v.resize(k);
 
-//    cout << "\n\n";
-//    for(double i : v)
-//        cout << i << endl;
+//        for(size_t z = 0; z < k; z++){
+//            if(df->getDistance(ans->getFeatureVector(z), test->getFeatureVector(x)) != v[z])
+//                cout << "iteracao " << x << " : " << "ERRO" << endl;
+//        }
 
+//    }
     /*
     -DATASET_TRAIN => Caminho para o dataset de treino
     ** -DATASET_TRAIN_CARDINALITY => Cardinalidade do dataset de treino
@@ -218,7 +229,7 @@ int main(int argc, char *argv[]){
         if((dataset_train_cardinality != nullptr) && (dataset_train_dimensionality != nullptr))
         {
 
-            train->doubleFileToDataset(train, *dataset_train, *dataset_train_cardinality, *dataset_train_dimensionality);
+            DatasetDouble::doubleFileToDataset(train, *dataset_train, *dataset_train_cardinality, *dataset_train_dimensionality);
 
         }
 
@@ -227,7 +238,7 @@ int main(int argc, char *argv[]){
         if((dataset_test_cardinality != nullptr) && (dataset_test_dimensionality != nullptr))
         {
 
-            test->doubleFileToDataset(test, *dataset_test, *dataset_test_cardinality, *dataset_test_dimensionality);
+            DatasetDouble::doubleFileToDataset(test, *dataset_test, *dataset_test_cardinality, *dataset_test_dimensionality);
 
         }
 
@@ -365,7 +376,7 @@ int main(int argc, char *argv[]){
 
                 df->resetStatistics();
                 auto start = std::chrono::steady_clock::now();
-                tree->kNN(test->getFeatureVector(x), k, tree->getRoot(), ans, df);
+                tree->kNNInc(test->getFeatureVector(x), k, tree->getRoot(), ans, df);
                 auto end = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
