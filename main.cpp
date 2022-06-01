@@ -348,7 +348,7 @@ int main(int argc, char *argv[]){
              << ","
              << "EUCLIDEANDISTANCE"
              << ","
-             << pivot_type
+             << *pivot_type
              << ","
              << (num_query == nullptr ? test->getCardinality() : *num_query)
              << ","
