@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Node/Node.h"
 #include <queue>
 #include <VpTree/QueueItem.h>
 #include <Dataset/Dataset.h>
@@ -8,7 +7,7 @@
 #include <VpTree/Node/DirectorNode.h>
 #include <PivotSelection/PivotSelection.h>
 #include <QProgressBar>
-#include <QObject>
+//#include <QObject>
 
 //class SignalsAndSlots: public QObject{
 //    Q_OBJECT
@@ -74,13 +73,14 @@ class VpTree/*: public SignalsAndSlots*/{
                       DistanceFunction *df);
 
         void kNNWalk(const DType &qElement,
-                        double &tau,
-                        uint_fast32_t k,
-                        Node<DType> *node,
-                        std::priority_queue<QueueItem<DType>,
-                                            std::vector<QueueItem<DType>>,
-                                            std::less<QueueItem<DType>>> *queue,
-                        DistanceFunction *df);
+                    double &tau,
+                    uint_fast32_t k,
+                    Node<DType> *node,
+                    std::priority_queue<QueueItem<DType>,
+                                        std::vector<QueueItem<DType>>,
+                                        std::less<QueueItem<DType>>> *queue,
+                    std::vector<std::pair<int, double>> *pivotVec,
+                    DistanceFunction *df);
 
         void updateProgress(QProgressBar *progressBar);
 

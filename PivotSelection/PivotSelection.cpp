@@ -2,7 +2,7 @@
 
 InstanceDouble PivotSelection::randomPivots(const DatasetDouble &dataset){
 
-    //srand(time_t(nullptr));
+    srand(time_t(nullptr));
     return dataset[rand()% dataset.getCardinality()-1];
 }
 
@@ -275,16 +275,10 @@ InstanceDouble PivotSelection::getPivot(const DatasetDouble &dataset, Algorithm 
 
         case RANDOM: return randomPivots(dataset);
         case VP_TREE: return selectVp(dataset, df);
-        //case K_MEDOID: break;
-        case K_MEDOID: return kmedoidPivots(sample_datasetPivot(dataset,1), df);
+        case K_MEDOID: break;
         case HULL_FOCI: return hull_foci(dataset, df);
-        case GNAT: return gnatPivot(sample_datasetPivot(dataset,1), df);
-        case MAX_SEPARATED: return maxseparetedPivots(sample_datasetPivot(dataset,1), df);
-        case SSS: return sssPivots(sample_datasetPivot(dataset,1), df);
-        case PCA: return pcaPivots(sample_datasetPivot(dataset,0.03), df);
-        case SELECTION: return selectionPivots(sample_datasetPivot(dataset,1), df);
-        default: return randomPivots(dataset);
 
+        default: return randomPivots(dataset);
     }
 }
 

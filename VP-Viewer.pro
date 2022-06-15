@@ -91,8 +91,6 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-INCLUDEPATH += ../eigen #Eigen 3.3.9
-
 DISTFILES += \
     cities.csv \
     names.csv

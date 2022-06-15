@@ -16,7 +16,7 @@ IMPL_TEMPL VpTree<DType, DistanceFunction>::VpTree(bool balance,
     this->dataset = *dataset;
     this->algorithm = algorithm;
 
-//    connect(this, SIGNAL(progressBarValueChanged(int)), progressBar, SLOT(setValue(int)));
+    //connect(this, SIGNAL(progressBarValueChanged(int)), progressBar, SLOT(setValue(int)));
 
     std::vector<DType> previousPivots;
     std::vector<std::vector<double>> distanceVector;
@@ -35,7 +35,7 @@ IMPL_TEMPL Node<DType> *VpTree<DType, DistanceFunction>::buildTree(const bool is
                                                                    DistanceFunction *df/*,
                                                                    QProgressBar *progressBar*/){
 
-//    updateProgress(progressBar);
+    //updateProgress(progressBar);
 
     const DType pivot = PivotSelection::getPivot(*dataset, algorithm, df);
 
@@ -94,13 +94,13 @@ IMPL_TEMPL Node<DType> *VpTree<DType, DistanceFunction>::buildTree(const bool is
         previousPivots.push_back(pivot);
         leaf->setPreviousPivots(previousPivots);
 
-        dataset->erase(pivot);
+//        dataset->erase(pivot);
 //        updateProgress(progressBar);
 
         for (uint_fast32_t i = 0; i < dataset->getSize(); i++){
 
             leaf->push_back(Pair<DType>(dataset->operator [](i), distanceVector.back()));
-//            updateProgress(progressBar);
+            //updateProgress(progressBar);
         }
 
         delete(dataset);
@@ -179,18 +179,18 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::splitDataset(const DType &pivot
 
     const uint_fast32_t cardinality = sourceDataset.getCardinality();
 
-    const uint32_t pivotOID = pivot.getOID();
+//    const uint32_t pivotOID = pivot.getOID();
 
     for (uint_fast32_t i = 0; i < cardinality; i++){
 
         const DType &fv = sourceDataset.getFeatureVector(i);
 
-        if (pivotOID != fv.getOID()){
+//        if (pivotOID != fv.getOID()){
             if (df->getDistance(pivot, fv) < mu)
                 innerDataset->push_back(fv);
             else
                 outerDataset->push_back(fv);
-        }
+//        }
 
     }
 
@@ -558,7 +558,7 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNIncWalk(const DType &qElemen
                 for (int i = 0; i < leaf->numberOfElements(); i++){
                     DType leafElement = leaf->getPair(i).first();
                     double dist = df->getDistance(leafElement, qElement);
-                    QueueItem<DType> qi = QueueItem<DType>(dist, leafElement); //ALTERACAO JOAO - estava sem template
+                    QueueItem<DType> qi = QueueItem<DType>(dist, leafElement);
                     elementQueue.push(qi);
                 }
 
@@ -581,7 +581,7 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNIncWalk(const DType &qElemen
             // Se entrar aqui, é garantido que o elementQueue tem elementos e que o nodeQueue tem nós,
             // assim como que o dMin do topo do nodeQueue é menor do que a distância no topo do elementQueue.
         } else if (!nodeQueue.empty() &&
-                   fabs(nodeQueue.top()->getDMin() - elementQueue.top().dist) < 0) {
+                   nodeQueue.top()->getDMin() < elementQueue.top().dist) {
 
             // Popa a partição
             Node<DType> *node = nodeQueue.top();
@@ -596,7 +596,7 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNIncWalk(const DType &qElemen
                 for (uint_fast32_t i = 0; i < leaf->numberOfElements(); i++){
                     DType leafElement = leaf->getPair(i).first();
                     double dist = df->getDistance(leafElement, qElement);
-                    QueueItem<DType> qi = QueueItem<DType>(dist, leafElement); //ALTERACAO JOAO - estava sem template
+                    QueueItem<DType> qi = QueueItem<DType>(dist, leafElement);
                     elementQueue.push(qi);
                 }
 
@@ -637,11 +637,11 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNInc(const DType &qElement,
 
     kNNIncWalk(qElement, k, node, &queue, df);
 
-    //std::cout << "(kNNInc) resultQueue.size(): " << queue.size() << std::endl;
+//    std::cout << "(kNNInc) resultQueue.size(): " << queue.size() << std::endl;
     answer->reserve(k);
     for (uint_fast32_t i = 0; i < k; i++){
         answer->push_back(queue.top().featureVector);
-        //std::cout << "(kNNInc) Distancia do " << i << " vizinho mais proximo:" << queue.top().dist << std::endl;
+//        std::cout << "(kNNInc) Distancia do " << i << " vizinho mais proximo:" << queue.top().dist << std::endl;
         queue.pop();
     }
 }
@@ -654,6 +654,7 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNWalk(const DType &qElement,
                                                          std::priority_queue<QueueItem<DType>,
                                                                              std::vector<QueueItem<DType>>,
                                                                              std::less<QueueItem<DType>>> *queue,
+                                                         std::vector<std::pair<int, double>> *pivotVec,
                                                          DistanceFunction *df){
 
     node->wasVisited = true;
@@ -664,8 +665,22 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNWalk(const DType &qElement,
 
         for (uint_fast32_t i = 0; i < leaf->numberOfElements(); i++){
 
-            double dist = df->getDistance(qElement, leaf->getPair(i).first());
-            queue->push(QueueItem<DType>(dist, leaf->getPair(i).first()));
+            DType leafElement = leaf->getPair(i).first();
+            double dist = 0.0;
+
+            bool found = 0;
+            for (size_t j = 0; j < pivotVec->size(); j++){
+                if (pivotVec->operator[](j).first == leafElement.getOID()){
+                    dist = pivotVec->operator[](j).second;
+                    found = 1;
+                    break;
+                }
+            }
+
+            if (!found)
+                dist = df->getDistance(qElement, leafElement);
+
+            queue->push(QueueItem<DType>(dist, leafElement));
 
             if (queue->size() > k)
                 queue->pop();
@@ -677,32 +692,34 @@ IMPL_TEMPL void VpTree<DType, DistanceFunction>::kNNWalk(const DType &qElement,
 
         double dist = df->getDistance(dirNode->getPivot(), qElement);
 
-        if (dist <= tau){
+        pivotVec->push_back(std::pair<int, double>(dirNode->getPivot().getOID(), dist));
 
-            queue->push(QueueItem<DType>(dist, dirNode->getPivot()));
+//        if (dist <= tau){
 
-            while (queue->size() > k)
-                queue->pop();
+//            queue->push(QueueItem<DType>(dist, dirNode->getPivot()));
 
-            if (queue->size() == k)
-                tau = queue->top().dist;
-        }
+//            while (queue->size() > k)
+//                queue->pop();
+
+//            if (queue->size() == k)
+//                tau = queue->top().dist;
+//        }
 
         if (dist < node->getMu()){
 
             if ((dist - tau <= dirNode->getMu()) && dirNode->getLeftNode() != nullptr)
-                kNNWalk(qElement, tau, k, dirNode->getLeftNode(), queue, df);
+                kNNWalk(qElement, tau, k, dirNode->getLeftNode(), queue, pivotVec, df);
 
             if ((dist + tau >= dirNode->getMu()) && dirNode->getRightNode() != nullptr)
-                kNNWalk(qElement, tau, k, dirNode->getRightNode(), queue, df);
+                kNNWalk(qElement, tau, k, dirNode->getRightNode(), queue, pivotVec, df);
 
         } else {
 
             if ((dist + tau >= dirNode->getMu()) && dirNode->getRightNode() != nullptr)
-                kNNWalk(qElement, tau, k, dirNode->getRightNode(), queue, df);
+                kNNWalk(qElement, tau, k, dirNode->getRightNode(), queue, pivotVec, df);
 
             if ((dist - tau <= node->getMu()) && dirNode->getLeftNode() != nullptr)
-                kNNWalk(qElement, tau, k, dirNode->getLeftNode(), queue, df);
+                kNNWalk(qElement, tau, k, dirNode->getLeftNode(), queue, pivotVec, df);
 
         }
 
