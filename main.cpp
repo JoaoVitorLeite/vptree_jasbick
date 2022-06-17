@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
 /*******************************************************************************************************************************/
 
 
-    for(std::size_t w = 0; w < 4490; w++){
+    for(std::size_t w = 0; w < 200; w++){
 
 //        Dataset<InstanceDouble> *train = new Dataset<InstanceDouble>();
 //        Dataset<InstanceDouble>::doubleFileToDataset(train, "/home/joaovictor/Code/Private.VP-Viewer/Datasets/cities.csv", 5507, 2);
@@ -59,6 +59,8 @@ int main(int argc, char *argv[]){
                 cout << "ERRO em : " << w << endl;
 
         }
+
+        cout << "DF COUNT = " << df->getDistanceCount() << endl;
 
     }
 
